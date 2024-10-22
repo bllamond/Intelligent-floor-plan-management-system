@@ -7,7 +7,7 @@ console.log('reached route');
 router.get('/', getFloorPlans);
 router.post('/', createFloorPlan);
 router.get('/:id', getFloorPlanById);
-router.put('/:id', updateFloorPlan); // Conflict resolution logic will be handled here
+router.put('/:id', updateFloorPlan);
 router.delete('/:id', deleteFloorPlanById);
 
 export default router;

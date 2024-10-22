@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import './AddFloorPlan.css'; // Make sure to include styling if needed
+import './AddFloorPlan.css';
 
 const UpdateFloorPlan = () => {
-  const { id } = useParams(); // Get the floor plan ID from the URL
+  const { id } = useParams(); 
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [seats, setSeats] = useState([]);
   const [rooms, setRooms] = useState([]);
   const navigate = useNavigate();
 
-  // Fetch the floor plan details when component mounts
   useEffect(() => {
     const fetchFloorPlan = async () => {
       try {
@@ -20,7 +19,6 @@ const UpdateFloorPlan = () => {
         }
         const data = await response.json();
 
-        // Populate form fields with the fetched data
         setName(data.name);
         setDescription(data.description);
         setSeats(data.seats || []);
