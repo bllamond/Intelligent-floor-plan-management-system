@@ -1,7 +1,14 @@
-import React, { useState } from "react";
+// AddFloorPlan.jsx
+import React, { useState, useEffect } from "react";
 import axios from "axios";
-import "./AddFloorPlan.css"; // Importing the CSS file
 import { useNavigate } from "react-router";
+import {
+  saveFloorPlan,
+  getFloorPlans,
+  deleteFloorPlan,
+} from "../services/indexedDB"; // Import IndexedDB functions
+import "./AddFloorPlan.css"; // Importing the CSS file
+import { v4 as uuidv4 } from 'uuid';
 
 const AddFloorPlan = () => {
   const [name, setName] = useState("");
@@ -9,7 +16,27 @@ const AddFloorPlan = () => {
   const [seats, setSeats] = useState([{ seatNumber: "", occupied: false }]);
   const [rooms, setRooms] = useState([{ roomNumber: "", capacity: "" }]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isOffline, setIsOffline] = useState(!navigator.onLine);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const handleOnline = () => {
+      setIsOffline(false);
+      syncFloorPlans(); // Sync offline changes when the app comes online
+    };
+
+    const handleOffline = () => setIsOffline(true);
+
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
+
+    // Cleanup listeners on unmount
+    return () => {
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
+    };
+  }, []);
+
   const handleAddSeat = () => {
     setSeats([...seats, { seatNumber: "", occupied: false }]);
   };
@@ -33,42 +60,75 @@ const AddFloorPlan = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const createdBy = "614a7c8e914c130e8c3c3c1f"; 
-    const modifiedBy = createdBy; 
+    const createdBy = "614a7c8e914c130e8c3c3c1f";
+    const modifiedBy = createdBy;
 
     const floorPlanData = {
+      _id: uuidv4(), // Generate a unique ID for the floor plan
       name,
       description,
       seats,
       rooms,
       createdBy,
-      modifiedBy, 
+      modifiedBy,
+      modifiedAt: new Date(),
     };
 
     try {
       setIsLoading(true);
-      const response = await axios.post(
-        "http://localhost:5000/api/floorplans",
-        floorPlanData
-      );
-      console.log("Floor Plan Created:", response.data);
+      if (isOffline) {
+        // Save to IndexedDB when offline
+        await saveFloorPlan(floorPlanData);
+        alert('Floor plan saved locally. Will sync when online.');
+      } else {
+        // Perform a regular network request to the server
+        const response = await axios.post(
+          "http://localhost:5000/api/floorplans",
+          floorPlanData
+        );
+        console.log("Floor Plan Created:", response.data);
+        alert('Floor plan created successfully!');
+      }
 
+      // Clear form fields
       setName("");
       setDescription("");
       setSeats([{ seatNumber: "", occupied: false }]);
       setRooms([{ roomNumber: "", capacity: "" }]);
       setIsLoading(false);
-      alert('Floor plan created successfully!');
 
     } catch (error) {
-      console.error("Error creating floor plan:", error.response.data);
+      console.error("Error creating floor plan:", error);
+      alert('Error creating floor plan. Please try again.');
+      setIsLoading(false);
+    }
+  };
+
+  const syncFloorPlans = async () => {
+    // Sync locally saved floor plans to the server
+    const floorPlans = await getFloorPlans();
+    for (const floorPlan of floorPlans) {
+      try {
+        const response = await axios.post(
+          "http://localhost:5000/api/floorplans",
+          floorPlan
+        );
+        console.log("Synced Floor Plan:", response.data);
+        // Delete the local copy after successful sync
+        await deleteFloorPlan(floorPlan._id);
+      } catch (error) {
+        console.error("Error syncing floor plan:", error);
+      }
     }
   };
 
   if (isLoading) return <div className="loading-message">Creating Floor Plan ...</div>;
+
   return (
     <div className="add-floor-plan-container">
-      <button className="back-button"onClick={() => navigate("/")}>Back to home</button>
+      <button className="back-button" onClick={() => navigate("/")}>
+        Back to home
+      </button>
       <h2>Add Floor Plan</h2>
       <form onSubmit={handleSubmit} className="floor-plan-form">
         <div className="form-group">

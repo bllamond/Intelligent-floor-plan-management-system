@@ -1,5 +1,6 @@
 // indexedDB.js
 import { openDB } from 'idb';
+import { v4 as uuidv4 } from 'uuid';
 
 const DB_NAME = 'FloorPlanDB';
 const STORE_NAME = 'floorPlans';
@@ -16,6 +17,12 @@ export const initDB = async () => {
 
 export const saveFloorPlan = async (floorPlan) => {
   const db = await initDB();
+
+  // Ensure the floor plan has a unique _id
+  if (!floorPlan._id) {
+    floorPlan._id = uuidv4();
+  }
+
   await db.put(STORE_NAME, floorPlan);
 };
 
