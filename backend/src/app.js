@@ -12,6 +12,7 @@ app.use(express.json());
 
 // Routes
 app.use('/api/floorplans', floorPlanRoutes);
+
 // app.use('/api/bookings', bookingRoutes);
 // app.use('/api/users', userRoutes);
 

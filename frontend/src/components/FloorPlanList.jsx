@@ -2,11 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './FloorPlanList.css'; // Import the CSS file for styling
 
-const FloorPlanList = () => {
+const FloorPlanList = ({onViewChanges}) => {
   const [floorPlans, setFloorPlans] = useState([]);
   const navigate = useNavigate();
 
-  // Fetch the list of floor plans from the server
   useEffect(() => {
     const fetchFloorPlans = async () => {
       try {
@@ -25,7 +24,6 @@ const FloorPlanList = () => {
   }, []);
 
   const handleUpdate = (id) => {
-    // Navigate to the update page with the selected floor plan ID
     navigate(`/update-floorplan/${id}`);
   };
 
@@ -35,7 +33,7 @@ const FloorPlanList = () => {
         method: 'DELETE'
       });
       if (response.ok) {
-        setFloorPlans(floorPlans.filter(floorPlan => floorPlan._id !== id)); // Remove the floor plan from the list
+        setFloorPlans(floorPlans.filter(floorPlan => floorPlan._id !== id));
         console.log('Floor plan removed successfully');
       } else {
         throw new Error('Error removing floor plan');
@@ -43,6 +41,12 @@ const FloorPlanList = () => {
     } catch (error) {
       console.error('Error removing floor plan:', error.message);
     }
+  };
+
+  
+
+  const handleViewChanges = (id) => {
+    onViewChanges(id); // Trigger the view changes action from the parent
   };
 
   return (
@@ -57,6 +61,7 @@ const FloorPlanList = () => {
             <div className="floorplan-actions">
               <button className="update-btn" onClick={() => handleUpdate(floorPlan._id)}>Update</button>
               <button className="remove-btn" onClick={() => handleRemove(floorPlan._id)}>Remove</button>
+              <button className="btn" onClick={() => handleViewChanges(floorPlan._id)}>View Changes history</button>
             </div>
           </li>
         ))}

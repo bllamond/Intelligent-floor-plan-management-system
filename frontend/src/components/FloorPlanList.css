@@ -36,7 +36,7 @@ h2 {
   display: flex;
   gap: 10px;
 }
-
+.btn,
 .update-btn,
 .remove-btn {
   padding: 8px 12px;
@@ -51,6 +51,10 @@ h2 {
   color: white;
 }
 
+.btn{
+  background-color: grey;
+  color: white;
+}
 .remove-btn {
   background-color: #f44336;
   color: white;

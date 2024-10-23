@@ -32,7 +32,18 @@ export const createFloorPlan = async (req, res) => {
   }
 }; 
 
-
+export const getChangesLog = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const floorPlan = await FloorPlan.findById(id).select('changeLog');
+    if (!floorPlan) {
+      return res.status(404).json({ message: 'Floor plan not found' });
+    }
+    res.status(200).json(floorPlan.changeLog);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching change log', error });
+  }
+}
 
 export const updateFloorPlan = async (req, res) => {
   console.log('update');

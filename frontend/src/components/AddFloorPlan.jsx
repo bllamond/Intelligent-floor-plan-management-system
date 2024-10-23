@@ -33,9 +33,8 @@ const AddFloorPlan = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    // Replace with actual ObjectId values from your user management logic
-    const createdBy = "614a7c8e914c130e8c3c3c1f"; // Example ObjectId for admin
-    const modifiedBy = createdBy; // Initially set to the same value
+    const createdBy = "614a7c8e914c130e8c3c3c1f"; 
+    const modifiedBy = createdBy; 
 
     const floorPlanData = {
       name,
@@ -43,7 +42,7 @@ const AddFloorPlan = () => {
       seats,
       rooms,
       createdBy,
-      modifiedBy, // Make sure this is included
+      modifiedBy, 
     };
 
     try {
@@ -53,7 +52,6 @@ const AddFloorPlan = () => {
         floorPlanData
       );
       console.log("Floor Plan Created:", response.data);
-      // Reset form or navigate to another page
 
       setName("");
       setDescription("");
