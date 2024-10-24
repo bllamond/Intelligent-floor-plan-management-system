@@ -1,12 +1,30 @@
-// models/MeetingRoom.js
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
-const MeetingRoomSchema = new mongoose.Schema({
-  roomNumber: { type: String, required: true },
-  floor: { type: mongoose.Schema.Types.ObjectId, ref: 'FloorPlan', required: true },
-  capacity: { type: Number, required: true },
-  availability: { type: Boolean, default: true },
-  lastBookingTime: { type: Date },
+const meetingRoomSchema = new mongoose.Schema({
+  roomNumber: {
+    type: Number,
+    required: true,
+  },
+  capacity: {
+    type: Number,
+    required: true,
+  },
+  availability: {
+    type: Boolean,
+    default: true,
+  },
+  lastBookedAt: {
+    type: Date,
+  },
+  proximityScore: {
+    type: Number,
+    default: 0,
+  },
+  floorPlan: {  // Reference to the corresponding FloorPlan
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'FloorPlan',
+  },
 });
 
-module.exports = mongoose.model('MeetingRoom', MeetingRoomSchema);
+const MeetingRoom = mongoose.model('MeetingRoom', meetingRoomSchema);
+export default MeetingRoom;

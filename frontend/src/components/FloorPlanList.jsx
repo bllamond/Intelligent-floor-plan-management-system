@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './FloorPlanList.css'; // Import the CSS file for styling
+import MeetingRoomForm from './MeetingRoomForm';
+import MeetingRoomRecommendations from './MeetingRoomRecommendations';
 
 const FloorPlanList = ({onViewChanges}) => {
   const [floorPlans, setFloorPlans] = useState([]);
@@ -50,6 +52,7 @@ const FloorPlanList = ({onViewChanges}) => {
   };
 
   return (
+    <>
     <div className="floorplan-list-container">
       <h2>Floor Plan List</h2>
       <ul className="floorplan-list">
@@ -66,7 +69,15 @@ const FloorPlanList = ({onViewChanges}) => {
           </li>
         ))}
       </ul>
+
+        {/* <MeetingRoomBooking /> */}
     </div>
+    <div className="floorplan-list-container">
+        <h1>Meeting Room Management</h1>
+        <MeetingRoomForm />
+        <MeetingRoomRecommendations />
+    </div>
+    </>
   );
 };
 

@@ -19,11 +19,7 @@ const roomSchema = new mongoose.Schema({
   capacity: {
     type: Number,
     required: true,
-  },
-  booked: {
-    type: Boolean,
-    default: false,
-  },
+  }
 });
 
 const changeLogSchema = new mongoose.Schema({
@@ -38,7 +34,7 @@ const changeLogSchema = new mongoose.Schema({
   },
   changes: {
     type: Map,
-    of: mongoose.Schema.Types.Mixed, // Can be used to store various types of changes
+    of: mongoose.Schema.Types.Mixed,
   },
 });
 
@@ -53,6 +49,13 @@ const floorPlanSchema = new mongoose.Schema({
   },
   seats: [seatSchema],
   rooms: [roomSchema],
+  meetingRooms: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'MeetingRoom',
+    },
+  ],
+
   version: { 
     type: Number, 
     default: 1 
@@ -71,7 +74,7 @@ const floorPlanSchema = new mongoose.Schema({
     ref: 'User', 
     required: true 
   },
-  changeLog: [changeLogSchema], // Array to store history of changes
+  changeLog: [changeLogSchema], 
 });
 
 const FloorPlan = mongoose.model('FloorPlan', floorPlanSchema);
