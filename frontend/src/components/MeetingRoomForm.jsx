@@ -25,7 +25,7 @@ const MeetingRoomForm = () => {
       capacity,
       floorPlanId: selectedFloor,
     };
-
+    console.log(meetingRoomData)
     try {
       await axios.post(
         "http://localhost:5000/api/meetingRooms",

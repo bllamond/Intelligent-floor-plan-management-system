@@ -29,9 +29,9 @@ console.log({'floorId': floorId, 'minCapacity' : minCapacity });
       const availableRooms = await MeetingRoom.find({
           availability: true,
           capacity: { $gte: minCapacity },
-          ...(floorId ? { floorId } : {}), // Filter by floor if specified
+          // ...(floorId ? { floorId } : {}), // Filter by floor if specified
       }).populate('floorId'); // Populate to get floor details
-
+      // console.log(availableRooms)
       res.json(availableRooms);
   } catch (error) {
       console.error(error);

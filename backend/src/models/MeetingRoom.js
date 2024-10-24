@@ -23,6 +23,7 @@ const meetingRoomSchema = new mongoose.Schema({
   floorId: {  
     type: mongoose.Schema.Types.ObjectId,
     ref: 'FloorPlan',
+    required: true,
   },
 });
 

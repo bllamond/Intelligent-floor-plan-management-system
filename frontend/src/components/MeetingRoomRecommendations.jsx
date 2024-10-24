@@ -150,7 +150,7 @@ const MeetingRoomRecommendations = () => {
             <ul>
                 {recommendedRooms.map(room => (
                     <li key={room._id}>
-                        Room {room.roomNumber} - Capacity: {room.capacity}
+                        Room {room.roomNumber} - Capacity: {room.capacity} - Score: {room.score}
                     </li>
                 ))}
             </ul>

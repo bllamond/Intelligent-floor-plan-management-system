@@ -85,12 +85,16 @@ const MeetingRoomBooking = () => {
 
       <h3>Recommended Rooms</h3>
       <ul>
-        {recommendedRooms.map((room) => (
+      {Array.isArray(availableRooms) && availableRooms.length > 0 ? (
+        recommendedRooms.map((room) => (
           <li key={room._id}>
             Room {room.roomNumber} (Capacity: {room.capacity})
             <button onClick={() => handleBookRoom(room._id)}>Book</button>
           </li>
-        ))}
+        ))
+       ) : (
+          <li>No recommended rooms </li>
+        )}
       </ul>
 
       <h3>Available Rooms</h3>
@@ -98,7 +102,7 @@ const MeetingRoomBooking = () => {
         {Array.isArray(availableRooms) && availableRooms.length > 0 ? (
           availableRooms.map((room) => (
             <li key={room._id}>
-              Room {room.roomNumber} (Capacity: {room.capacity}) 
+              Room {room.roomNumber} | Capacity: {room.capacity} | {room.floorId.name}
               <button onClick={() => handleBookRoom(room._id)}>Book</button>
             </li>
           ))
