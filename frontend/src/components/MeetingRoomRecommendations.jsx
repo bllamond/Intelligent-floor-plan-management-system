@@ -88,40 +88,74 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 const MeetingRoomRecommendations = () => {
-  const [floorId, setFloorId] = useState('');
-  const [recommendedRooms, setRecommendedRooms] = useState([]);
-  const [floorPlans, setFloorPlans] = useState([]);
+    const [floorPlans, setFloorPlans] = useState([]);
+    const [participants, setParticipants] = useState(0);
+    const [recommendedRooms, setRecommendedRooms] = useState([]);
+    const [selectedFloor, setSelectedFloor] = useState("");
 
-  useEffect(() => {
-    const fetchFloorPlans = async () => {
-      const response = await axios.get('http://localhost:5000/api/floorplans');
-      setFloorPlans(response.data);
-    };
+    // Fetching floor plans on component mount
+    useEffect(() => {
+        const fetchFloorPlans = async () => {
+            try {
+                const response = await axios.get("http://localhost:5000/api/floorplans");
+                setFloorPlans(response.data);
+            } catch (error) {
+                console.error('Error fetching floor plans:', error);
+            }
+        };
+        fetchFloorPlans();
+    }, []);
 
-    fetchFloorPlans();
-  }, []);
+    // Fetch recommendations whenever selectedFloor or participants change
+    useEffect(() => {
+        const fetchRecommendations = async () => {
+            if (selectedFloor && participants > 0) {
+                try {
+                    const response = await axios.get('http://localhost:5000/api/meetingRooms/recommendations', {
+                        params: { floorId: selectedFloor, participants }
+                    });
+                    setRecommendedRooms(response.data);
+                } catch (error) {
+                    console.error('Error fetching recommendations:', error);
+                }
+            }
+        };
 
-  const fetchRecommendations = async () => {
-    const response = await axios.get("http://localhost:5000/api/recommendations", { params: { floorId } });
-    setRecommendedRooms(response.data);
-  };
+        fetchRecommendations();
+    }, [selectedFloor, participants]);
 
-  return (
-    <div>
-      <select value={floorId} onChange={(e) => setFloorId(e.target.value)}>
-        <option value="">All Floors</option>
-        {floorPlans.map(floor => (
-          <option key={floor._id} value={floor._id}>{floor.name}</option>
-        ))}
-      </select>
-      <button onClick={fetchRecommendations}>Get Recommendations</button>
-      <ul>
-        {recommendedRooms.map(room => (
-          <li key={room._id}>{`Room: ${room.roomNumber}, Capacity: ${room.capacity}`}</li>
-        ))}
-      </ul>
-    </div>
-  );
+    return (
+        <div>
+            <h2>Recommend Meeting Rooms</h2>
+            <input
+                type="number"
+                placeholder="Number of Participants"
+                value={participants}
+                onChange={(e) => setParticipants(e.target.value)}
+                required
+            />
+            <select
+                value={selectedFloor}
+                onChange={(e) => setSelectedFloor(e.target.value)}
+                required
+            >
+                <option value="">Select Floor</option>
+                {floorPlans.map((floor) => (
+                    <option key={floor._id} value={floor._id}>
+                        {floor.name}
+                    </option>
+                ))}
+            </select>
+            <h3>Top 3 Recommended Rooms</h3>
+            <ul>
+                {recommendedRooms.map(room => (
+                    <li key={room._id}>
+                        Room {room.roomNumber} - Capacity: {room.capacity}
+                    </li>
+                ))}
+            </ul>
+        </div>
+    );
 };
 
 export default MeetingRoomRecommendations;

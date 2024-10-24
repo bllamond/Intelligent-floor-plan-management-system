@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './FloorPlanList.css'; // Import the CSS file for styling
 import MeetingRoomForm from './MeetingRoomForm';
+import MeetingRoomBooking from './MeetingRoomBooking';
 import MeetingRoomRecommendations from './MeetingRoomRecommendations';
 
 const FloorPlanList = ({onViewChanges}) => {
@@ -75,7 +76,8 @@ const FloorPlanList = ({onViewChanges}) => {
     <div className="floorplan-list-container">
         <h1>Meeting Room Management</h1>
         <MeetingRoomForm />
-        <MeetingRoomRecommendations />
+        {/* <MeetingRoomRecommendations/> */}
+        <MeetingRoomBooking />
     </div>
     </>
   );

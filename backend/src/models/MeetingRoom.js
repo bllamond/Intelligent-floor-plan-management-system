@@ -20,7 +20,7 @@ const meetingRoomSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
-  floorPlan: {  // Reference to the corresponding FloorPlan
+  floorId: {  
     type: mongoose.Schema.Types.ObjectId,
     ref: 'FloorPlan',
   },

@@ -12,7 +12,21 @@ app.use(express.json());
 
 app.use('/api/floorplans', floorPlanRoutes);
 app.use('/api/meetingRooms', meetingRoomRoutes);
-app.use('/api/recommendations', recommendationsRoutes);
+app.use('/api/meetingRooms/recommendations', async (req, res) => {
+    const { floorId, participants } = req.query;
+    console.log(floorId);
+    try {
+        const query = { availability: true, capacity: { $gte: participants } };
+        if (floorId) {
+            query.floorPlanId = floorId; // Filter by floor if specified
+        }
+        const recommendedRooms = await MeetingRoom.find(query).limit(3); // Get top 3
+        res.status(200).json(recommendedRooms);
+    } catch (error) {
+        res.status(500).json({ message: 'Error fetching recommendations.', error });
+    }
+});
+
 
 
 // app.use(errorHandler);

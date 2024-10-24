@@ -3,21 +3,57 @@ import FloorPlan from '../models/FloorPlan.js';
 
 // Get available meeting rooms based on capacity and availability
 export const getAvailableMeetingRooms = async (req, res) => {
-  const { minCapacity } = req.query;
-  console.log(req.query);
+  // const { minCapacity } = req.query;
+  // console.log(req.query);
+  // try {
+  //   console.log('reached')
+  //   const availableRooms = await MeetingRoom.find({
+  //     capacity: { $gte: minCapacity },
+  //     availability: true,
+  //   }).sort({ proximityScore: -1 }); // Sort by proximityScore
+  //   console.log(availableRooms);
+  //   res.json(availableRooms);
+  // } catch (error) {
+  //   res.status(500).json({ message: 'Error fetching meeting rooms', error });
+  // }
+//   try {
+//     const availableRooms = await MeetingRoom.find({ availability: true });
+//     res.status(200).json(availableRooms);
+// } catch (error) {
+//     res.status(500).json({ message: 'Error fetching available rooms.', error });
+// }
+
+const { floorId, minCapacity } = req.query;
+console.log({'floorId': floorId, 'minCapacity' : minCapacity });
   try {
-    console.log('reached')
-    const availableRooms = await MeetingRoom.find({
-      capacity: { $gte: minCapacity },
-      availability: true,
-    }).sort({ proximityScore: -1 }); // Sort by proximityScore
-    console.log(availableRooms);
-    res.json(availableRooms);
+      const availableRooms = await MeetingRoom.find({
+          availability: true,
+          capacity: { $gte: minCapacity },
+          ...(floorId ? { floorId } : {}), // Filter by floor if specified
+      }).populate('floorId'); // Populate to get floor details
+
+      res.json(availableRooms);
   } catch (error) {
-    res.status(500).json({ message: 'Error fetching meeting rooms', error });
+      console.error(error);
+      res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+// app.get('/api/meetingRooms/available', async (req, res) => {
+//   const { floorId, minCapacity } = req.query;
 
+//   try {
+//       const availableRooms = await MeetingRoom.find({
+//           availability: true,
+//           capacity: { $gte: minCapacity },
+//           ...(floorId ? { floorId } : {}), // Filter by floor if specified
+//       }).populate('floorId'); // Populate to get floor details
+
+//       res.json(availableRooms);
+//   } catch (error) {
+//       console.error(error);
+//       res.status(500).json({ error: 'Internal Server Error' });
+//   }
+// });
 // Book a meeting room
 export const bookMeetingRoom = async (req, res) => {
   const { roomId } = req.body;
