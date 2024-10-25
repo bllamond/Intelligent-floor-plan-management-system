@@ -1,5 +1,6 @@
 # Intelligent Floor Plan Management System for a Seamless Workspace Experience
 
+
 ## Table of Contents
 1. [Features](#features)
 2. [Key Features Explanation](#key-features-explanation)
@@ -24,6 +25,10 @@ Admins can upload and modify floor plans while resolving conflicts that may aris
 Conflicts are resolved based on priority, timestamp, or user roles. The system uses a version control mechanism to track changes.
 
 <!-- Placeholder for a screenshot -->
+![Floor Plan](https://github.com/bllamond/Intelligent-floor-plan-management-system/blob/main/Screenshot%20(115).png)
+###
+![Floor Plan](https://github.com/bllamond/Intelligent-floor-plan-management-system/blob/main/Screenshot%20(116).png)
+
 
 ### 2. Offline Mechanism for Admins
 The system supports offline changes, allowing admins to continue working even during connectivity issues.
@@ -40,6 +45,10 @@ localStorage.setItem('offlineChanges', JSON.stringify(changes));
 window.addEventListener('online', syncChangesToServer);
 ```
 <!-- Placeholder for a screenshot -->
+![Floor Plan](https://github.com/bllamond/Intelligent-floor-plan-management-system/blob/main/Screenshot%20(119).png)
+###
+![Floor Plan](https://github.com/bllamond/Intelligent-floor-plan-management-system/blob/main/Screenshot%20(120).png)
+
 
 ### 3. Meeting Room Optimization
 Provides suggestions for meeting rooms based on capacity, proximity, and previous bookings.
@@ -58,7 +67,11 @@ const recommendedRooms = await MeetingRoom.find({
     ...(floorId ? { floorId } : {}),
 }).sort({ proximityScore: -1, lastBookedAt: -1 }).limit(3);
 ```
-![Floor plan changes history](./Screenshot (121).png)
+
+![Floor Plan](https://github.com/bllamond/Intelligent-floor-plan-management-system/blob/main/Screenshot%20(118).png)
+###
+![Floor Plan](https://github.com/bllamond/Intelligent-floor-plan-management-system/blob/main/Screenshot%20(121).png)
+
 
 
 ### Technologies Used
@@ -99,10 +112,3 @@ PORT=5000
 ```bash
 npm start
 ```
-
-## Screenshots
-- **Admin Floor Plan Management**
-  
-- **Offline Mechanism Example**
-
-- **Meeting Room Optimization**
