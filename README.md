@@ -58,7 +58,8 @@ const recommendedRooms = await MeetingRoom.find({
     ...(floorId ? { floorId } : {}),
 }).sort({ proximityScore: -1, lastBookedAt: -1 }).limit(3);
 ```
-<!-- Placeholder for a screenshot -->
+![Floor plan changes history](./Screenshot (121).png)
+
 
 ### Technologies Used
 - **Frontend**: React.js, Axios
