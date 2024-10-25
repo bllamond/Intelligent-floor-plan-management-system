@@ -1,5 +1,6 @@
-# Intelligent Floor Plan Management System for a Seamless Workspace Experience
+[Watch the demo video](https://drive.google.com/file/d/1t1gKsP1YfveksP5VcT_-byIL9lv09Aj1/view?usp=sharing)
 
+# Intelligent Floor Plan Management System for a Seamless Workspace Experience
 
 ## Table of Contents
 1. [Features](#features)
